@@ -1,7 +1,11 @@
 FROM debian:jessie
 
+# Configure your user and pass for Steam, in order to build the image
 ARG steam_user=anonymous
 ARG steam_password=
+
+# If you receive and error building because of a steam guard code,put the code here, uncomment this line and others below
+#ARG steam_guard_code=
 ARG metamod_version=1.20
 ARG amxmod_version=1.8.2
 
@@ -18,6 +22,13 @@ RUN /opt/steam/steamcmd.sh +login $steam_user $steam_password +force_install_dir
 RUN /opt/steam/steamcmd.sh +login $steam_user $steam_password +force_install_dir /opt/hlds +app_update 70 validate +quit || :
 RUN /opt/steam/steamcmd.sh +login $steam_user $steam_password +force_install_dir /opt/hlds +app_update 10 validate +quit || :
 RUN /opt/steam/steamcmd.sh +login $steam_user $steam_password +force_install_dir /opt/hlds +app_update 90 validate +quit
+
+# If you uncomment this lines, you should comment above lines
+#RUN /opt/steam/steamcmd.sh +login $steam_user $steam_password $steam_guard_code +force_install_dir /opt/hlds +app_update 90 validate +quit
+#RUN /opt/steam/steamcmd.sh +login $steam_user $steam_password $steam_guard_code +force_install_dir /opt/hlds +app_update 70 validate +quit || :
+#RUN /opt/steam/steamcmd.sh +login $steam_user $steam_password $steam_guard_code +force_install_dir /opt/hlds +app_update 10 validate +quit || :
+#RUN /opt/steam/steamcmd.sh +login $steam_user $steam_password $steam_guard_code +force_install_dir /opt/hlds +app_update 90 validate +quit
+
 RUN mkdir -p ~/.steam && ln -s /opt/hlds ~/.steam/sdk32
 RUN ln -s /opt/steam/ /opt/hlds/steamcmd
 ADD files/steam_appid.txt /opt/hlds/steam_appid.txt
